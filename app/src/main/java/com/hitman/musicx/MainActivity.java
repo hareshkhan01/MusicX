@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         // Set up the TabLayout
         tab=findViewById(R.id.tab_layout);
         viewPager2=findViewById(R.id.view_pager);
-
+        System.out.println("This is fucked up example");
         // Set the viewPager adapter
         viewPagerMusicAdapter=new ViewPagerMusicAdapter(getSupportFragmentManager(),getLifecycle());
         viewPager2.setAdapter(viewPagerMusicAdapter);
