@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MusicX</string>
+    <string name="music_text">MusicX</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings">Settings</string>
+    <string name="done">Done</string>
+    <string name="about">About</string>
+    <string name="tabs_text">Tabs</string>
+    <string name="ai_to_shu_hokages_furneral_from_naruto">Ai to Shu - Hokages Furneral - From Naruto</string>
+    <string name="todo">TODO</string>
+    <string name="rmaster">RMaster</string>
+    <string name="play_pause_button_desc">Play Pause Button</string>
+    <string name="next_button_description">Next Button</string>
+</resources>
