@@ -4,31 +4,40 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hitman.musicx.adapter.ViewPagerMusicAdapter;
+import com.hitman.musicx.ui.MusicBottomSheet;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private TabLayout tab;
     private ViewPagerMusicAdapter viewPagerMusicAdapter;
     private SeekBar seekBar;
-    ImageButton nextButton;
-    ImageButton playPauseButton;
+    private ImageButton nextButton;
+    private ImageButton playPauseButton;
+    private CardView floatingCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
         //Floating bar view set up and initialization
         playPauseButton=findViewById(R.id.floating_bar_play_pause_button);
         nextButton=findViewById(R.id.floating_bar_next_buttton);
+
+        floatingCardView=findViewById(R.id.floating_bar_card_view);
+        floatingCardView.setOnClickListener(view->{
+            MusicBottomSheet musicBottomSheet=new MusicBottomSheet();
+            musicBottomSheet.show(getSupportFragmentManager(),musicBottomSheet.getTag());
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("MusicX");

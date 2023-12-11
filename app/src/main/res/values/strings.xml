@@ -14,4 +14,5 @@
     <string name="next_button_description">Next Button</string>
     <string name="angle_down_button_description">This is angle downbutton to dissmiss bottom sheet</string>
     <string name="three_dot_bottomSheet_description">this is the three dot button in bottom sheet</string>
+    <string name="on_repeat">On Repeat</string>
 </resources>
