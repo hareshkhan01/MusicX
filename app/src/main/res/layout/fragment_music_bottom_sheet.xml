@@ -11,6 +11,7 @@
         android:animateLayoutChanges="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent">
@@ -23,15 +24,18 @@
                 android:layout_marginTop="16dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/angle_down_button_description"
-                android:src="@drawable/ic_angle_down_icon"
+                android:src="@drawable/ic_angle_down_icon_dark"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
+                android:id="@+id/muic_mode_textview_bottomsheet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/on_repeat"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton2"
                 app:layout_constraintStart_toEndOf="@+id/angle_down"
@@ -43,13 +47,71 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_horizontal_three_dot_icon"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/three_dot_bottomSheet_description"
+                android:src="@drawable/ic_horizontal_three_dot_icon_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/three_dot_bottomSheet_description" />
+                tools:ignore="TouchTargetSizeCheck,RedundantDescriptionCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="2dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+            <TextView
+                android:id="@+id/music_current_time_state_bottomsheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/music_timer_textview_padding"
+                android:text="02:15"
+                android:textColor="#03a5fc" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/music_timer_textview_padding"
+                android:text="|" />
+
+            <TextView
+                android:id="@+id/music_end_time_bottomsheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/music_timer_textview_padding"
+                android:text="03:05" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <me.tankery.lib.circularseekbar.CircularSeekBar
+                android:layout_width="405dp"
+                android:layout_height="300dp"
+                app:cs_circle_stroke_width="5dp"
+                app:cs_circle_style="round"
+                app:cs_end_angle="250"
+                app:cs_start_angle="290"
+                app:cs_pointer_stroke_width="15dp"
+                app:cs_progress="70"
+                 />
+
+        </RelativeLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

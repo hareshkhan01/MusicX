@@ -1,26 +1,21 @@
 package com.hitman.musicx;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -28,7 +23,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hitman.musicx.adapter.ViewPagerMusicAdapter;
-import com.hitman.musicx.ui.MusicBottomSheet;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
@@ -53,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         floatingCardView=findViewById(R.id.floating_bar_card_view);
         floatingCardView.setOnClickListener(view->{
-            MusicBottomSheet musicBottomSheet=new MusicBottomSheet();
-            musicBottomSheet.show(getSupportFragmentManager(),musicBottomSheet.getTag());
+            showMusicBottomSheet();
         });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -103,6 +96,27 @@ public class MainActivity extends AppCompatActivity {
 
 
         seekBar.setProgress(30);
+    }
+
+    private void showMusicBottomSheet() {
+        BottomSheetDialog bottomSheetDialog= new BottomSheetDialog(MainActivity.this);
+        BottomSheetBehavior<View> bottomSheetBehavior;
+        View bottomSheetView= LayoutInflater.from(MainActivity.this).inflate(R.layout.fragment_music_bottom_sheet,null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        bottomSheetBehavior=BottomSheetBehavior.from((View) bottomSheetView.getParent());
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+        CoordinatorLayout layout= bottomSheetDialog.findViewById(R.id.bottom_sheet_root_layout);
+        assert layout != null;
+        layout.setMinimumHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
+
+        ImageButton angleDown=(ImageButton) bottomSheetView.findViewById(R.id.angle_down);
+        angleDown.setOnClickListener(v -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        });
+
+        bottomSheetDialog.show();
     }
 
     @Override
