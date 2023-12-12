@@ -106,7 +106,9 @@
                 app:cs_end_angle="250"
                 app:cs_pointer_stroke_width="15dp"
                 app:cs_progress="70"
-                app:cs_start_angle="290" />
+                app:cs_start_angle="290"
+                app:cs_circle_color = "#C4CAD2"
+                />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/music_imageview_bottom_sheet"
