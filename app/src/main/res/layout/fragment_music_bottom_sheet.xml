@@ -104,10 +104,17 @@
                 app:cs_circle_stroke_width="5dp"
                 app:cs_circle_style="round"
                 app:cs_end_angle="250"
-                app:cs_start_angle="290"
                 app:cs_pointer_stroke_width="15dp"
                 app:cs_progress="70"
-                 />
+                app:cs_start_angle="290" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/music_imageview_bottom_sheet"
+                android:layout_width="230dp"
+                android:layout_height="230dp"
+                android:src="@drawable/youth_troye_sivan"
+               android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"/>
 
         </RelativeLayout>
 
