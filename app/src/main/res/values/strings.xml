@@ -15,4 +15,9 @@
     <string name="angle_down_button_description">This is angle downbutton to dissmiss bottom sheet</string>
     <string name="three_dot_bottomSheet_description">this is the three dot button in bottom sheet</string>
     <string name="on_repeat">On Repeat</string>
+    <string name="shuffle_button_description">This is the shuffle button</string>
+    <string name="backward_button_description">This is backward button</string>
+    <string name="playpause_button_description">This is play pause button</string>
+    <string name="forward_btuton_description">This is forward button description</string>
+    <string name="loop_button_description">This is loop button</string>
 </resources>
