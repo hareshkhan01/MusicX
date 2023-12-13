@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet_root_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#1B1919">
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#1B1919">
+        android:background="#1B1919"
+        app:layout_anchor="@+id/constraintLayout2"
+        app:layout_anchorGravity="center">
+
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             style="@style/CustomCardCorners"
             android:layout_width="0dp"
-            android:layout_height="650dp"
-            android:background="@color/white"
-            app:cardCornerRadius="50dp"
-            android:elevation="10dp"
+            android:layout_height="700dp"
             android:layout_marginTop="-50dp"
+            android:background="@color/white"
+            android:elevation="10dp"
+            app:cardCornerRadius="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -31,8 +39,8 @@
                     android:id="@+id/constraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:background="@color/white">
+                    android:background="@color/white"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageButton
                         android:id="@+id/angle_down"
@@ -45,7 +53,7 @@
                         android:src="@drawable/ic_angle_down_icon_dark"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        />
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <TextView
                         android:id="@+id/muic_mode_textview_bottomsheet"
@@ -71,7 +79,7 @@
                         android:src="@drawable/ic_horizontal_three_dot_icon_dark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        />
+                        tools:ignore="TouchTargetSizeCheck" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/music_timer_textview_padding"
                         android:text="|"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/music_end_time_bottomsheet"
@@ -108,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/music_timer_textview_padding"
                         android:text="03:05"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -153,8 +161,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
-                    />
+                    app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
 
                 <TextView
@@ -184,49 +191,116 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
+                        android:contentDescription="@string/shuffle_button_description"
                         android:src="@drawable/ic_shuffle_icon"
-                        android:contentDescription="@string/shuffle_button_description" />
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
+                        android:contentDescription="@string/backward_button_description"
                         android:src="@drawable/ic_backward_icon_dark"
-                        android:contentDescription="@string/backward_button_description"/>
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/ic_play_button_icon_bottomsheet_dark"
-                        android:contentDescription="@string/playpause_button_description"/>
+                        android:contentDescription="@string/playpause_button_description"
+                        android:src="@drawable/ic_play_button_icon_bottomsheet_dark" />
 
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
+                        android:contentDescription="@string/forward_btuton_description"
                         android:src="@drawable/ic_forward_icon_dark"
-                        android:contentDescription="@string/forward_btuton_description"/>
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/ic_loop_icon_black"
                         android:contentDescription="@string/loop_button_description"
-                        />
+                        android:src="@drawable/ic_loop_icon_black"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                 </LinearLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/share_button_description"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:srcCompat="@drawable/ic_share_icon" />
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/three_line_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:srcCompat="@drawable/ic_three_lines" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.113"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintVertical_bias="0.082"
+            app:srcCompat="@drawable/ic_bottom_sheet_bottom_bar_logo" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="Lyrics By"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.342"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="MusixMatch"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.282"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -20,4 +20,6 @@
     <string name="playpause_button_description">This is play pause button</string>
     <string name="forward_btuton_description">This is forward button description</string>
     <string name="loop_button_description">This is loop button</string>
+    <string name="three_line_description">This is the three lines button in main music player</string>
+    <string name="share_button_description">This is the share button in main music player layout</string>
 </resources>
