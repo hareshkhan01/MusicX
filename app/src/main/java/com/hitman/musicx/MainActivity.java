@@ -159,4 +159,6 @@ public class MainActivity extends AppCompatActivity {
             nextButton.setImageResource(R.drawable.ic_float_bar_next_icon_dark);
         }
     }
+
+
 }
