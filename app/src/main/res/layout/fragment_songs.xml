@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     tools:context=".ui.AlbumsFragment"
-    android:background="#D23535">
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/songs_recyclerview"

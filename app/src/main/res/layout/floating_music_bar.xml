@@ -78,8 +78,12 @@
             <!--            This text view is for song title-->
             <TextView
                 android:id="@+id/floating_bar_song_title"
-                android:layout_width="wrap_content"
+                android:layout_width="150sp"
                 android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:scrollHorizontally="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/ai_to_shu_hokages_furneral_from_naruto"

@@ -1,30 +1,50 @@
 package com.hitman.musicx;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hitman.musicx.adapter.ViewPagerMusicAdapter;
+import com.hitman.musicx.data.Repository;
+
+import java.io.File;
+import java.security.Permission;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int PERMISSION_REQUEST_CODE=9999;
     private ViewPager2 viewPager2;
     private TabLayout tab;
     private ViewPagerMusicAdapter viewPagerMusicAdapter;
@@ -32,11 +52,18 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton nextButton;
     private ImageButton playPauseButton;
     private CardView floatingCardView;
+    private TextView floatingBarSongTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            checkPermission();
+        }
+        Repository repository=new Repository();
+        List<File> songList=repository.getSongsList(new File(Environment.getExternalStorageState()));
+        Log.d("songList", "onCreate: "+songList.toString());
 
         seekBar=findViewById(R.id.seekBar);
         seekBar.setEnabled(false);
@@ -44,12 +71,14 @@ public class MainActivity extends AppCompatActivity {
         //Floating bar view set up and initialization
         playPauseButton=findViewById(R.id.floating_bar_play_pause_button);
         nextButton=findViewById(R.id.floating_bar_next_buttton);
-
+        floatingBarSongTitle=findViewById(R.id.floating_bar_song_title);
         floatingCardView=findViewById(R.id.floating_bar_card_view);
+
+        floatingBarSongTitle.setSelected(true);
         floatingCardView.setOnClickListener(view->{
             showMusicBottomSheet();
         });
-
+        // End Floating Bar setup
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("MusicX");
         setSupportActionBar(toolbar);
@@ -161,4 +190,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public void checkPermission(){
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO)== PackageManager.PERMISSION_GRANTED){
+            displaySongList();
+            Log.d("myPerm", "checkPermission: already permited");
+        }
+        else {
+            Log.d("myPerm", "checkPermission: not have permission");
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.READ_MEDIA_AUDIO},PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==PERMISSION_REQUEST_CODE){
+                if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_MEDIA_AUDIO)
+                        ==PackageManager.PERMISSION_GRANTED){
+                    displaySongList();
+                }
+                else {
+                    if(shouldShowRequestPermissionRationale(Manifest.permission.READ_MEDIA_AUDIO)){
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("This permission is mandatory to run the application")
+                                .setPositiveButton("OK", (dialog, which) -> {
+                                    checkPermission();
+                                })
+                                .setNegativeButton("Cancel",(dialog,which)->{
+                                    Toast.makeText(this,"Please check the permission manually",Toast.LENGTH_SHORT).show();
+                                })
+                                .show();
+                    }
+                }
+            }
+        }
+
+
+    private void displaySongList() {
+        Log.d("myPerm", "displaySongList: Permission Granted and now ready to show song list");
+    }
 }
