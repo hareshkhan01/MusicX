@@ -6,6 +6,25 @@ import android.net.Uri;
 public class Song {
     private String songName;
     private String artistName;
+    private String path;
+    private long duration;
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
     private Uri songURL;
     private Image songImage;
 

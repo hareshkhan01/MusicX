@@ -9,6 +9,9 @@ import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
@@ -35,12 +38,16 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.hitman.musicx.adapter.SongRecyclerViewAdapter;
 import com.hitman.musicx.adapter.ViewPagerMusicAdapter;
 import com.hitman.musicx.data.Repository;
+import com.hitman.musicx.model.SharedViewModel;
+import com.hitman.musicx.model.Song;
 
 import java.io.File;
 import java.security.Permission;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -53,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton playPauseButton;
     private CardView floatingCardView;
     private TextView floatingBarSongTitle;
+    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +69,13 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkPermission();
         }
-        Repository repository=new Repository();
-        List<File> songList=repository.getSongsList(new File(Environment.getExternalStorageState()));
-        Log.d("songList", "onCreate: "+songList.toString());
+        Repository repository=new Repository(getContentResolver());
+//        new File(Environment.getExternalStorageState())
+        List<Song> songList=repository.getSongList();
+        // Set the shared viewModel for sharing data among the application where we want
+        sharedViewModel= new ViewModelProvider(this).get(SharedViewModel.class);
+        sharedViewModel.setSongsList(songList);
+
 
         seekBar=findViewById(R.id.seekBar);
         seekBar.setEnabled(false);
@@ -126,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
         seekBar.setProgress(30);
     }
+
+
 
     private void showMusicBottomSheet() {
         BottomSheetDialog bottomSheetDialog= new BottomSheetDialog(MainActivity.this);
