@@ -4,11 +4,11 @@ import android.media.Image;
 import android.net.Uri;
 
 public class Song {
-    private String songName;
-    private String artistName;
-    private String path;
-    private long duration;
-
+    private String songName; // Song title or the name
+    private String artistName; // Artist Name
+    private String path; // path location
+    private long duration; // Total Duration of the song
+    private Image songImage; // This is for song title image that associated with the song
     public String getPath() {
         return path;
     }
@@ -25,17 +25,14 @@ public class Song {
         this.duration = duration;
     }
 
-    private Uri songURL;
-    private Image songImage;
-
     public Song() {
     }
 
-    public Song(String songName, String artistName, Uri songURL, Image songImage) {
+    public Song(String songName, String artistName, String path,Image songImage) {
         this.songName = songName;
         this.artistName = artistName;
-        this.songURL = songURL;
         this.songImage = songImage;
+        this.path=path;
     }
 
     public String getSongName() {
@@ -52,14 +49,6 @@ public class Song {
 
     public void setArtistName(String artistName) {
         this.artistName = artistName;
-    }
-
-    public Uri getSongURL() {
-        return songURL;
-    }
-
-    public void setSongURL(Uri songURL) {
-        this.songURL = songURL;
     }
 
     public Image getSongImage() {

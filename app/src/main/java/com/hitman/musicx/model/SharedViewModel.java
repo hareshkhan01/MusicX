@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 public class SharedViewModel extends ViewModel {
-    private MutableLiveData<List<Song>> songsList;
-    private MutableLiveData<Song> currentSong;
+    private MutableLiveData<List<Song>> songsList=new MutableLiveData<>();
+    private MutableLiveData<Song> currentSong=new MutableLiveData<>();
 
     public LiveData<List<Song>> getSongsList() {
         return songsList;

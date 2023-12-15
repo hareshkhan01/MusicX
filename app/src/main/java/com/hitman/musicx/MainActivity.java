@@ -43,6 +43,7 @@ import com.hitman.musicx.adapter.ViewPagerMusicAdapter;
 import com.hitman.musicx.data.Repository;
 import com.hitman.musicx.model.SharedViewModel;
 import com.hitman.musicx.model.Song;
+import com.hitman.musicx.player.MusicPlayer;
 
 import java.io.File;
 import java.security.Permission;
@@ -69,13 +70,13 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkPermission();
         }
-        Repository repository=new Repository(getContentResolver());
+//        Repository repository=new Repository(getContentResolver());
 //        new File(Environment.getExternalStorageState())
-        List<Song> songList=repository.getSongList();
-        // Set the shared viewModel for sharing data among the application where we want
-        sharedViewModel= new ViewModelProvider(this).get(SharedViewModel.class);
-        sharedViewModel.setSongsList(songList);
-
+//        List<Song> songList=repository.getSongList();
+//        // Set the shared viewModel for sharing data among the application where we want
+//        sharedViewModel= new ViewModelProvider(this).get(SharedViewModel.class);
+//        sharedViewModel.setSongsList(songList);
+        MusicPlayer musicPlayer=new MusicPlayer();
 
         seekBar=findViewById(R.id.seekBar);
         seekBar.setEnabled(false);
@@ -244,5 +245,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void displaySongList() {
         Log.d("myPerm", "displaySongList: Permission Granted and now ready to show song list");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (MusicPlayer.isAnyMusicPlaying()){
+            MusicPlayer.pauseCurrentMusic();
+            MusicPlayer.releaseMediaPlayer();
+        }
+        MusicPlayer.stopCurrentMusic();
+        MusicPlayer.setMediaPlayerNull();
     }
 }

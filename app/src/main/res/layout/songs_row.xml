@@ -3,72 +3,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+
+
+    <LinearLayout
+        android:id="@+id/song_row_inner_layout_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_weight="2"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/song_row_title"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:padding="3dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="This is the song title"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/song_row_artist_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/song_row_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:padding="3dp"
-                    android:scrollHorizontally="true"
-                    android:text="This is the song title"
-                    android:textSize="22sp" />
-
-                <TextView
-                    android:id="@+id/song_row_artist_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:text="This is the songs artist name" />
-            </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/song_row_threeDot_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_vertical_three_dot_dark" />
+                android:padding="3dp"
+                android:text="This is the songs artist name" />
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+        <ImageButton
+            android:id="@+id/song_row_threeDot_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_vertical_three_dot_dark" />
+    </LinearLayout>
+
+
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_height="1dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:background="#8B8888"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+        app:layout_constraintTop_toBottomOf="@id/song_row_inner_layout_1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
