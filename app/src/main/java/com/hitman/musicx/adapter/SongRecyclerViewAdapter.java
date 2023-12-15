@@ -17,7 +17,7 @@ import java.util.List;
 
 public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerViewAdapter.ViewHolder> {
     private final List<Song> songList;
-    private OnSongClickListener onSongClickListener;
+    private final OnSongClickListener onSongClickListener;
     public SongRecyclerViewAdapter(List<Song> songList,OnSongClickListener onSongClickListener){
         this.songList=songList;
         this.onSongClickListener=onSongClickListener;
