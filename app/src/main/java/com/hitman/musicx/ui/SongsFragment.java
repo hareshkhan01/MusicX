@@ -16,11 +16,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hitman.musicx.R;
-import com.hitman.musicx.adapter.SongListViewAdapter;
 import com.hitman.musicx.adapter.SongRecyclerViewAdapter;
 import com.hitman.musicx.data.Repository;
 import com.hitman.musicx.model.SharedViewModel;
@@ -30,13 +28,12 @@ import com.hitman.musicx.player.MusicPlayer;
 import java.util.List;
 import java.util.Objects;
 
-public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.OnSongClickListener,SongListViewAdapter.OnSongClickListener{
+public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.OnSongClickListener{
     private RecyclerView recyclerView;
     private SongRecyclerViewAdapter recyclerViewAdapter;
     private List<Song> songList;
     private SharedViewModel sharedViewModel;
-    private Repository repository;
-    private ListView listView;
+    Repository repository;
     public SongsFragment() {
         // Required empty public constructor
     }
@@ -65,11 +62,10 @@ public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.O
         super.onViewCreated(view, savedInstanceState);
 
         repository=new Repository(requireContext());
-//        recyclerView=view.findViewById(R.id.songs_recyclerview);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setItemViewCacheSize(100);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        listView=view.findViewById(R.id.song_list_view);
+        recyclerView=view.findViewById(R.id.songs_recyclerview);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(100);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
         sharedViewModel=new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
@@ -77,10 +73,8 @@ public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.O
         songList=repository.getSongList();
         sharedViewModel.setSongsList(songList);
         if(songList!=null){
-            SongListViewAdapter songListViewAdapter=new SongListViewAdapter(songList,this,requireContext());
-            listView.setAdapter(songListViewAdapter);
-//            recyclerViewAdapter=new SongRecyclerViewAdapter(songList,this,requireContext());
-//            recyclerView.setAdapter(recyclerViewAdapter);
+            recyclerViewAdapter=new SongRecyclerViewAdapter(songList,this,requireContext());
+            recyclerView.setAdapter(recyclerViewAdapter);
         }
 
 
