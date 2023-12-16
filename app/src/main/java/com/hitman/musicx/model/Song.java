@@ -1,5 +1,6 @@
 package com.hitman.musicx.model;
 
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
 
@@ -8,7 +9,27 @@ public class Song {
     private String artistName; // Artist Name
     private String path; // path location
     private long duration; // Total Duration of the song
-    private Image songImage; // This is for song title image that associated with the song
+    private String artWork; // This is for song album image that associated with the song
+    private long albumID;
+
+    private Bitmap songCoverImage;
+
+    public Bitmap getSongCoverImage() {
+        return songCoverImage;
+    }
+
+    public void setSongCoverImage(Bitmap songCoverImage) {
+        this.songCoverImage = songCoverImage;
+    }
+
+    public long getAlbumID() {
+        return albumID;
+    }
+
+    public void setAlbumID(long albumID) {
+        this.albumID = albumID;
+    }
+
     public String getPath() {
         return path;
     }
@@ -28,11 +49,12 @@ public class Song {
     public Song() {
     }
 
-    public Song(String songName, String artistName, String path,Image songImage) {
+    public Song(String songName, String artistName, String path, String artWork,Bitmap songCoverImage) {
         this.songName = songName;
         this.artistName = artistName;
-        this.songImage = songImage;
+        this.artWork=artWork;
         this.path=path;
+        this.songCoverImage=songCoverImage;
     }
 
     public String getSongName() {
@@ -51,11 +73,11 @@ public class Song {
         this.artistName = artistName;
     }
 
-    public Image getSongImage() {
-        return songImage;
+    public String getArtWork() {
+        return artWork;
     }
 
-    public void setSongImage(Image songImage) {
-        this.songImage = songImage;
+    public void setArtWork(String artWork) {
+        this.artWork = artWork;
     }
 }

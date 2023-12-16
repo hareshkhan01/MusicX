@@ -44,6 +44,7 @@ import com.hitman.musicx.data.Repository;
 import com.hitman.musicx.model.SharedViewModel;
 import com.hitman.musicx.model.Song;
 import com.hitman.musicx.player.MusicPlayer;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.security.Permission;

@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
-
+    android:layout_height="wrap_content">
 
 
     <LinearLayout
@@ -18,10 +16,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/song_row_imageview"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
             android:orientation="vertical">
 
             <TextView
@@ -48,11 +51,12 @@
             android:id="@+id/song_row_threeDot_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_vertical_three_dot_dark" />
+            android:padding="12dp"
+            android:src="@drawable/ic_vertical_three_dot_dark"
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
+            android:contentDescription="@string/three_dot_bottomSheet_description" />
     </LinearLayout>
-
 
 
     <LinearLayout

@@ -60,9 +60,11 @@ public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.O
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         repository=new Repository(requireContext());
         recyclerView=view.findViewById(R.id.songs_recyclerview);
         recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(100);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
@@ -71,7 +73,7 @@ public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.O
         songList=repository.getSongList();
         sharedViewModel.setSongsList(songList);
         if(songList!=null){
-            recyclerViewAdapter=new SongRecyclerViewAdapter(songList,this);
+            recyclerViewAdapter=new SongRecyclerViewAdapter(songList,this,requireContext());
             recyclerView.setAdapter(recyclerViewAdapter);
         }
 

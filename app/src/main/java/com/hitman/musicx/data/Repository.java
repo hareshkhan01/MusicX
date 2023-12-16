@@ -1,9 +1,14 @@
 package com.hitman.musicx.data;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -43,7 +48,8 @@ public class Repository {
                 MediaStore.Audio.Media.DATA,// -> this is for selecting the path of the file
                 MediaStore.Audio.Media.TITLE,// -> this is for selecting the file name of the file
                 MediaStore.Audio.Media.ARTIST,// -> this is for the file name author
-                MediaStore.Audio.Media.DURATION// here is a music file so each music file has a duration so we it is for selecting the duration
+                MediaStore.Audio.Media.DURATION,// here is a music file so each music file has a duration so we it is for selecting the duration
+                MediaStore.Audio.Media.ALBUM_ID
         };
 
 
@@ -73,11 +79,30 @@ public class Repository {
                 song.setSongName(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)));
                 song.setDuration(cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)));
                 song.setArtistName(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)));
+                song.setAlbumID(cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ID)));
+
+//                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+//                retriever.setDataSource(song.getPath());
+
+//                String albumId = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+
+
+                // i use this previously to get the image of song album
+//                long albumIdLong = song.getAlbumID();  // Retrieve the album ID associated with the song
+//                Uri albumArtUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumIdLong);// Create a URI for the album artwork using the album ID and the base URI for album art
+//                song.setArtWork(albumArtUri.toString());  // Set the album artwork URI as a string in the 'song' instance
+
+
+
+
                 arrayList.add(song); // add each music file
             }
         }
         assert cursor != null;
         cursor.close();// then we close the cursor prevent from data leak
+        for (Song s: arrayList){
+            Log.d("mySongArt", "SongImagePath: "+s.getArtWork());
+        }
 
         return arrayList;
     }
