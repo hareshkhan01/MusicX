@@ -143,26 +143,41 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    // Method to display the music bottom sheet
     private void showMusicBottomSheet() {
-        BottomSheetDialog bottomSheetDialog= new BottomSheetDialog(MainActivity.this);
+        // Create a BottomSheetDialog instance
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
+
+        // Declare BottomSheetBehavior and initialize it
         BottomSheetBehavior<View> bottomSheetBehavior;
-        View bottomSheetView= LayoutInflater.from(MainActivity.this).inflate(R.layout.fragment_music_bottom_sheet,null);
+
+        // Inflate the layout for the bottom sheet
+        View bottomSheetView = LayoutInflater.from(MainActivity.this).inflate(R.layout.fragment_music_bottom_sheet, null);
+
+        // Set the bottom sheet content view
         bottomSheetDialog.setContentView(bottomSheetView);
 
-        bottomSheetBehavior=BottomSheetBehavior.from((View) bottomSheetView.getParent());
+        // Get the BottomSheetBehavior from the parent view of the bottom sheet
+        bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+
+        // Set the state of the bottom sheet to expanded
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        CoordinatorLayout layout= bottomSheetDialog.findViewById(R.id.bottom_sheet_root_layout);
+        // Set the minimum height of the bottom sheet to the screen height
+        CoordinatorLayout layout = bottomSheetDialog.findViewById(R.id.bottom_sheet_root_layout);
         assert layout != null;
         layout.setMinimumHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
 
-        ImageButton angleDown=(ImageButton) bottomSheetView.findViewById(R.id.angle_down);
+        // Set up click listener for the angle down button to hide the bottom sheet
+        ImageButton angleDown = bottomSheetView.findViewById(R.id.angle_down);
         angleDown.setOnClickListener(v -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         });
 
+        // Show the bottom sheet
         bottomSheetDialog.show();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

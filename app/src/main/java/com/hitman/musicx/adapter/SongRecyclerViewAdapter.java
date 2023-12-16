@@ -5,6 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +25,10 @@ import com.hitman.musicx.model.Song;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerViewAdapter.ViewHolder> {
     private final List<Song> songList;
@@ -47,27 +53,33 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
         holder.songName.setText(song.getSongName());
         holder.songArtist.setText(song.getArtistName());
         holder.songName.setSelected(true);
-//        Picasso.get().load(song.getArtWork())
-//                .placeholder(R.drawable.ic_music_placeholder_icon_dark)
-//                .error(R.drawable.ic_music_placeholder_icon_dark)
-//                .into(holder.songImageView);
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(song.getPath());
 
-        byte[] coverImageBytes = retriever.getEmbeddedPicture();
-        if(coverImageBytes!=null) {
-            Bitmap bitmap=BitmapFactory.decodeByteArray(coverImageBytes, 0, coverImageBytes.length);
-            holder.songImageView.setImageBitmap(bitmap);
-        }
+        // **** There is a problem is got that unnecessary loading while scrolling the recycler view and loading time is too much with laggy ness ****
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//        Handler handler = new Handler(Looper.getMainLooper());
+//        executor.execute(()->{
+//            handler.post(()->{
+//                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+//                retriever.setDataSource(song.getPath());
+//
+//                byte[] coverImageBytes = retriever.getEmbeddedPicture();
+//                if(coverImageBytes!=null) {
+//                    Bitmap bitmap=BitmapFactory.decodeByteArray(coverImageBytes, 0, coverImageBytes.length);
+//                    holder.songImageView.setImageBitmap(bitmap);
+//                }
+//            });
+//        });
 
 
 
-    }
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
+
+
+
+        // This is approach is good not ui lag but still some little bit of lag remains but the ui image loading is so annoying it changes again an aging while scrolling
+    LoadImageTask loadImageTask=new LoadImageTask(holder.songImageView);
+    loadImageTask.execute(song.getPath());
+
+
     }
 
     @Override
@@ -102,4 +114,57 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
     public interface OnSongClickListener{
         void onSongClick(Song song);
     }
+
+
+//    // AsyncTask to load album cover image in the background
+    private static class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
+
+        // WeakReference to the ImageView to avoid memory leaks
+        private WeakReference<ImageView> imageViewReference;
+
+        // Constructor to initialize the WeakReference with the ImageView
+        LoadImageTask(ImageView imageView) {
+            imageViewReference = new WeakReference<>(imageView);
+        }
+
+        // Background task to decode album cover image from song metadata
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            // Get the path of the song
+            String songPath = params[0];
+
+            // Create a MediaMetadataRetriever and set its data source to the song path
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(songPath);
+
+            // Retrieve the album cover image bytes from the song metadata
+            byte[] coverImageBytes = retriever.getEmbeddedPicture();
+
+            // Decode the byte array into a Bitmap if cover image is present
+            if (coverImageBytes != null) {
+                return BitmapFactory.decodeByteArray(coverImageBytes, 0, coverImageBytes.length);
+            }
+
+            // Return null if no album cover image is found
+            return null;
+        }
+
+        // Callback method executed on the UI thread after the background task is completed
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            // Check if the ImageView reference and the decoded bitmap are not null
+            if (imageViewReference != null && bitmap != null) {
+                // Get the ImageView from the WeakReference
+                ImageView imageView = imageViewReference.get();
+
+                // Set the decoded bitmap as the ImageView's image
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+    }
+
+
+
 }

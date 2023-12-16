@@ -22,9 +22,6 @@ import java.util.List;
 public class Repository {
     ContentResolver contentResolver ; // we will use contentResolver to query
     Context context;
-//    public Repository(ContentResolver contentResolver){
-//        this.contentResolver=contentResolver;
-//    }
     public Repository(Context context){
         this.context=context;
         contentResolver=context.getContentResolver();
@@ -81,10 +78,6 @@ public class Repository {
                 song.setArtistName(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)));
                 song.setAlbumID(cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ID)));
 
-//                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//                retriever.setDataSource(song.getPath());
-
-//                String albumId = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
 
 
                 // i use this previously to get the image of song album
