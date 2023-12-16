@@ -64,7 +64,6 @@ public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.O
         repository=new Repository(requireContext());
         recyclerView=view.findViewById(R.id.songs_recyclerview);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(100);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
