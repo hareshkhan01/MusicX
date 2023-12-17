@@ -8,7 +8,7 @@ import com.hitman.musicx.model.Song;
 
 import java.io.IOException;
 
-public class MusicPlayer  {
+public class MusicPlayer {
     private static MediaPlayer mediaPlayer;
     public static void playMusic(Song song){
         mediaPlayer=new MediaPlayer(); // we just initialize the mediaPlayer simply because we will play music from storage or API web link
@@ -29,6 +29,14 @@ public class MusicPlayer  {
                 mp.start(); // when the mediaPlayer is ready we play the music
             }
         };
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                if(mp!=null){
+                    mp.start();
+                }
+            }
+        });
         mediaPlayer.setOnPreparedListener(onPreparedListener); // set a preparesListener means set a listener that will execute the respected code inside that when the mediaPlayer will ready after async request
         mediaPlayer.prepareAsync(); // making an asynchronous request
 
@@ -72,4 +80,5 @@ public class MusicPlayer  {
     public  static boolean isMediaPlayerNull(){
         return mediaPlayer == null;
     }
+
 }
