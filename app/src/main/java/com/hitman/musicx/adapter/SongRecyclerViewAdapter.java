@@ -61,6 +61,10 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
             Glide.with(context).asBitmap()
                     .load(song.getSongCoverImage())
                     .into(holder.songImageView);
+
+            // we can also use this but i am not gonna use that
+//            .placeholder(R.drawable.ic_music_placeholder_icon_dark)
+//                    .error(R.drawable.ic_music_placeholder_icon_dark)
         }
 
         // This is approach is good not ui lag but still some little bit of lag remains but the ui image loading is so annoying it changes again an aging while scrolling
