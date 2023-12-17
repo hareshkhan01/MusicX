@@ -27,7 +27,9 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -55,47 +57,42 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
         holder.songArtist.setText(song.getArtistName());
         holder.songName.setSelected(true);
 
-        // **** There is a problem is got that unnecessary loading while scrolling the recycler view and loading time is too much with laggy ness ****
-//        ExecutorService executor = Executors.newSingleThreadExecutor();
-//        Handler handler = new Handler(Looper.getMainLooper());
-//        executor.execute(()->{
-//            handler.post(()->{
-//                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//                retriever.setDataSource(song.getPath());
-//
-//                byte[] coverImageBytes = retriever.getEmbeddedPicture();
-//                if(coverImageBytes!=null) {
-//                    Bitmap bitmap=BitmapFactory.decodeByteArray(coverImageBytes, 0, coverImageBytes.length);
-//                    holder.songImageView.setImageBitmap(bitmap);
-//                }
-//            });
-//        });
-
-
-
-
-
+        if(song.getSongCoverImage()!=null){
+            Glide.with(context).asBitmap()
+                    .load(song.getSongCoverImage())
+                    .into(holder.songImageView);
+        }
 
         // This is approach is good not ui lag but still some little bit of lag remains but the ui image loading is so annoying it changes again an aging while scrolling
-//    LoadImageTask loadImageTask=new LoadImageTask(holder.songImageView);
+//    LoadImageTask loadImageTask=new LoadImageTask(holder.songImageView,song.getPath());
 //    loadImageTask.execute(song.getPath());
 
 
 
-          ExecutorService executor =Executors.newSingleThreadExecutor();
-          executor.execute(()->{
-              MediaMetadataRetriever mmr=new MediaMetadataRetriever();
-              mmr.setDataSource(song.getPath());
-              byte[] coverImage=mmr.getEmbeddedPicture();
-              if(coverImage!=null){
-                  new Handler(Looper.getMainLooper()).post(()->{
-                      Glide.with(context).asBitmap()
-                              .load(coverImage)
-                              .into(holder.songImageView);
-                  });
-              }
+        // This method is still laggy a bit but itna too chalta hain bar bar image loading hone se acha hai
+//          ExecutorService executor =Executors.newSingleThreadExecutor();
+//          executor.execute(()->{
+//              MediaMetadataRetriever mmr=new MediaMetadataRetriever();
+//              mmr.setDataSource(song.getPath());
+//              byte[] coverImage=mmr.getEmbeddedPicture();
+//              if(coverImage!=null){
+//                  new Handler(Looper.getMainLooper()).post(()->{
+//                      Glide.with(context).asBitmap()
+//                              .load(coverImage)
+//                              .into(holder.songImageView);
+//                  });
+//              }
+//
+//          });
 
-          });
+//        MediaMetadataRetriever mmr=new MediaMetadataRetriever();
+//        mmr.setDataSource(song.getPath());
+//        byte[] coverImage=mmr.getEmbeddedPicture();
+//        if(coverImage!=null){
+//                Glide.with(context).asBitmap()
+//                        .load(coverImage)
+//                        .into(holder.songImageView);
+//        }
 
 
     }
@@ -135,53 +132,49 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
 
 
 //    // AsyncTask to load album cover image in the background
-    private static class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
+    public static class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
 
-        // WeakReference to the ImageView to avoid memory leaks
-        private WeakReference<ImageView> imageViewReference;
+        private final WeakReference<ImageView> imageViewReference;
+        private final String songPath;
+        private static final Map<String, Bitmap> imageCache = new HashMap<>();
 
-        // Constructor to initialize the WeakReference with the ImageView
-        LoadImageTask(ImageView imageView) {
+        public LoadImageTask(ImageView imageView, String songPath) {
             imageViewReference = new WeakReference<>(imageView);
+            this.songPath = songPath;
         }
 
-        // Background task to decode album cover image from song metadata
         @Override
         protected Bitmap doInBackground(String... params) {
-            // Get the path of the song
-            String songPath = params[0];
+            Bitmap cachedBitmap = imageCache.get(songPath);
+            if (cachedBitmap != null) {
+                return cachedBitmap;
+            }
 
-            // Create a MediaMetadataRetriever and set its data source to the song path
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             retriever.setDataSource(songPath);
 
-            // Retrieve the album cover image bytes from the song metadata
             byte[] coverImageBytes = retriever.getEmbeddedPicture();
 
-            // Decode the byte array into a Bitmap if cover image is present
             if (coverImageBytes != null) {
-                return BitmapFactory.decodeByteArray(coverImageBytes, 0, coverImageBytes.length);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(coverImageBytes, 0, coverImageBytes.length);
+                imageCache.put(songPath, bitmap);
+                return bitmap;
             }
 
-            // Return null if no album cover image is found
             return null;
         }
 
-        // Callback method executed on the UI thread after the background task is completed
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            // Check if the ImageView reference and the decoded bitmap are not null
             if (imageViewReference != null && bitmap != null) {
-                // Get the ImageView from the WeakReference
                 ImageView imageView = imageViewReference.get();
-
-                // Set the decoded bitmap as the ImageView's image
-                if (imageView != null) {
+                if (imageView != null && songPath.equals(imageView.getTag())) {
                     imageView.setImageBitmap(bitmap);
                 }
             }
         }
     }
+
 
 
 

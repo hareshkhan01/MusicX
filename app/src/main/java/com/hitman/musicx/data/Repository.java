@@ -12,6 +12,9 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.hitman.musicx.model.Song;
 
 import java.io.File;
@@ -22,11 +25,12 @@ import java.util.List;
 public class Repository {
     ContentResolver contentResolver ; // we will use contentResolver to query
     Context context;
+    private final MutableLiveData<ArrayList<Song>> repoMutableLiveData=new MutableLiveData<>();
     public Repository(Context context){
         this.context=context;
         contentResolver=context.getContentResolver();
     }
-    public ArrayList<Song> getSongList(){
+    public LiveData<ArrayList<Song>> getSongList()  {
         /*
         Each song file will be an object of Song class
         and there will be many music files so we store them in a array
@@ -88,6 +92,7 @@ public class Repository {
 
 
 
+
                 arrayList.add(song); // add each music file
             }
         }
@@ -96,7 +101,7 @@ public class Repository {
         for (Song s: arrayList){
             Log.d("mySongArt", "SongImagePath: "+s.getArtWork());
         }
-
-        return arrayList;
+        repoMutableLiveData.postValue(arrayList);
+        return repoMutableLiveData;
     }
 }

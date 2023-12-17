@@ -43,6 +43,7 @@ import com.hitman.musicx.adapter.ViewPagerMusicAdapter;
 import com.hitman.musicx.data.Repository;
 import com.hitman.musicx.model.SharedViewModel;
 import com.hitman.musicx.model.Song;
+import com.hitman.musicx.model.SongViewModel;
 import com.hitman.musicx.player.MusicPlayer;
 import com.squareup.picasso.Picasso;
 
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkPermission();
         }
+        SongViewModel songViewModel=new ViewModelProvider.AndroidViewModelFactory(MainActivity.this.getApplication()).create(SongViewModel.class);
 //        Repository repository=new Repository(getContentResolver());
 //        new File(Environment.getExternalStorageState())
 //        List<Song> songList=repository.getSongList();

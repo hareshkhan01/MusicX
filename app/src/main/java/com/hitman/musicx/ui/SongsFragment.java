@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,20 +19,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hitman.musicx.MainActivity;
 import com.hitman.musicx.R;
 import com.hitman.musicx.adapter.SongRecyclerViewAdapter;
 import com.hitman.musicx.data.Repository;
+import com.hitman.musicx.data.SongImageLoader;
 import com.hitman.musicx.model.SharedViewModel;
 import com.hitman.musicx.model.Song;
+import com.hitman.musicx.model.SongViewModel;
 import com.hitman.musicx.player.MusicPlayer;
+import com.hitman.musicx.util.MyThread;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.OnSongClickListener{
     private RecyclerView recyclerView;
     private SongRecyclerViewAdapter recyclerViewAdapter;
-    private List<Song> songList;
+    private ArrayList<Song> songList;
     private SharedViewModel sharedViewModel;
     Repository repository;
     public SongsFragment() {
@@ -65,16 +73,20 @@ public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.O
         recyclerView=view.findViewById(R.id.songs_recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        sharedViewModel= new SharedViewModel();
 
+        SongViewModel.getSongsList().observe(getViewLifecycleOwner(), songArrayList -> {
 
-        sharedViewModel=new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-
-        songList=repository.getSongList();
-        sharedViewModel.setSongsList(songList);
-        if(songList!=null){
-            recyclerViewAdapter=new SongRecyclerViewAdapter(songList,this,requireContext());
+            recyclerViewAdapter= new SongRecyclerViewAdapter(songArrayList,this,requireContext());
             recyclerView.setAdapter(recyclerViewAdapter);
-        }
+            sharedViewModel.setSongsList(songArrayList);
+            songList=songArrayList;
+            MyThread.executor.execute(()->
+            {
+                SongImageLoader.setSongsImage(songList);
+            });
+        });
+
 
 
     }

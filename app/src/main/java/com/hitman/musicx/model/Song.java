@@ -12,13 +12,13 @@ public class Song {
     private String artWork; // This is for song album image that associated with the song
     private long albumID;
 
-    private Bitmap songCoverImage;
+    private byte[] songCoverImage;
 
-    public Bitmap getSongCoverImage() {
+    public byte[] getSongCoverImage() {
         return songCoverImage;
     }
 
-    public void setSongCoverImage(Bitmap songCoverImage) {
+    public void setSongCoverImage(byte[] songCoverImage) {
         this.songCoverImage = songCoverImage;
     }
 
@@ -49,7 +49,7 @@ public class Song {
     public Song() {
     }
 
-    public Song(String songName, String artistName, String path, String artWork,Bitmap songCoverImage) {
+    public Song(String songName, String artistName, String path, String artWork,byte[] songCoverImage) {
         this.songName = songName;
         this.artistName = artistName;
         this.artWork=artWork;
