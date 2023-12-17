@@ -81,10 +81,6 @@ public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.O
             recyclerView.setAdapter(recyclerViewAdapter);
             sharedViewModel.setSongsList(songArrayList);
             songList=songArrayList;
-            MyThread.executor.execute(()->
-            {
-                SongImageLoader.setSongsImage(songList);
-            });
         });
 
 

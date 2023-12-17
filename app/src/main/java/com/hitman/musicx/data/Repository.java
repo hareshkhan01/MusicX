@@ -16,6 +16,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.hitman.musicx.model.Song;
+import com.hitman.musicx.util.MyThread;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,7 +90,9 @@ public class Repository {
 //                Uri albumArtUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumIdLong);// Create a URI for the album artwork using the album ID and the base URI for album art
 //                song.setArtWork(albumArtUri.toString());  // Set the album artwork URI as a string in the 'song' instance
 
-
+                MyThread.executor.execute(()->{
+                    SongImageLoader.setSongImage(song);
+                });
 
 
 

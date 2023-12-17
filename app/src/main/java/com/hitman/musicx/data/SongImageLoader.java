@@ -16,4 +16,11 @@ public class SongImageLoader {
         }
         return songArrayList;
     }
+    public static Song setSongImage(Song song){
+        MediaMetadataRetriever mmr=new MediaMetadataRetriever();
+        mmr.setDataSource(song.getPath());
+        byte[] coverImage= mmr.getEmbeddedPicture();
+        song.setSongCoverImage(coverImage);
+        return song;
+    }
 }
