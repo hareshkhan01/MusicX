@@ -20,6 +20,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hitman.musicx.R;
 import com.hitman.musicx.model.Song;
 import com.squareup.picasso.Picasso;
@@ -76,8 +77,25 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
 
 
         // This is approach is good not ui lag but still some little bit of lag remains but the ui image loading is so annoying it changes again an aging while scrolling
-    LoadImageTask loadImageTask=new LoadImageTask(holder.songImageView);
-    loadImageTask.execute(song.getPath());
+//    LoadImageTask loadImageTask=new LoadImageTask(holder.songImageView);
+//    loadImageTask.execute(song.getPath());
+
+
+
+          ExecutorService executor =Executors.newSingleThreadExecutor();
+          executor.execute(()->{
+              MediaMetadataRetriever mmr=new MediaMetadataRetriever();
+              mmr.setDataSource(song.getPath());
+              byte[] coverImage=mmr.getEmbeddedPicture();
+              if(coverImage!=null){
+                  new Handler(Looper.getMainLooper()).post(()->{
+                      Glide.with(context).asBitmap()
+                              .load(coverImage)
+                              .into(holder.songImageView);
+                  });
+              }
+
+          });
 
 
     }
