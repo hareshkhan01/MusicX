@@ -12,7 +12,6 @@ public class MusicPlayer {
     private static MediaPlayer mediaPlayer;
     public static void playMusic(Song song){
         mediaPlayer=new MediaPlayer(); // we just initialize the mediaPlayer simply because we will play music from storage or API web link
-
         try {
                mediaPlayer.setDataSource(song.getPath()); // set the path where the music file is present
 
@@ -47,6 +46,11 @@ public class MusicPlayer {
     or
     we can also say we just override the normal  function of MediaPlayer class for out benefits
      */
+    public static void startTheMusic(){
+        if(mediaPlayer!=null){
+            mediaPlayer.start();
+        }
+    }
     public static void stopCurrentMusic()
     {
         if(mediaPlayer!=null){
@@ -65,6 +69,14 @@ public class MusicPlayer {
             return mediaPlayer.isPlaying();
         }
         return false;
+    }
+    public static void seekTo(int time){
+        if (mediaPlayer!=null){
+            mediaPlayer.seekTo(time);
+        }
+    }
+    public static int getMusicCurrentPosition(){
+        return mediaPlayer!=null?mediaPlayer.getCurrentPosition():-1;
     }
     public static void releaseMediaPlayer(){
         if(mediaPlayer!=null){

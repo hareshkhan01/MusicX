@@ -8,7 +8,7 @@ public class Song {
     private String songName; // Song title or the name
     private String artistName; // Artist Name
     private String path; // path location
-    private long duration; // Total Duration of the song
+    private int duration; // Total Duration of the song
     private String artWork; // This is for song album image that associated with the song
     private long albumID;
 
@@ -38,11 +38,11 @@ public class Song {
         this.path = path;
     }
 
-    public long getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 

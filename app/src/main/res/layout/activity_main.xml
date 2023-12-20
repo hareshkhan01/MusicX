@@ -71,7 +71,6 @@
             android:layout_alignParentBottom="true"
             android:background="@android:color/transparent"
             android:orientation="horizontal"
-            android:visibility="gone"
             android:padding="8dp">
 
             <!--            inside the linear layout we include the floating music bar-->

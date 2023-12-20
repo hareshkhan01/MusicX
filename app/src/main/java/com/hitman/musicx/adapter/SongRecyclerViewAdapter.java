@@ -123,15 +123,15 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
         @Override
         public void onClick(View v) {
             int id=v.getId();
+            int position=getAdapterPosition();
             if(id!=R.id.song_row_threeDot_button){
-                Log.d("SongClick", "onClick: Song Clicked "+getAdapterPosition());
-                onSongClickListener.onSongClick(songList.get(getAdapterPosition()));
+                onSongClickListener.onSongClick(songList.get(position),position);
             }
         }
     }
 
     public interface OnSongClickListener{
-        void onSongClick(Song song);
+        void onSongClick(Song song,int position);
     }
 
 
