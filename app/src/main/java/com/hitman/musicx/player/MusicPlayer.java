@@ -10,8 +10,17 @@ import java.io.IOException;
 
 public class MusicPlayer {
     private static MediaPlayer mediaPlayer;
+
     public static void playMusic(Song song){
-        mediaPlayer=new MediaPlayer(); // we just initialize the mediaPlayer simply because we will play music from storage or API web link
+
+        if(MusicPlayer.isMediaPlayerNull()){
+            mediaPlayer=new MediaPlayer(); // we just initialize the mediaPlayer simply because we will play music from storage or API web link
+        }
+
+        if(mediaPlayer.isPlaying()){
+            mediaPlayer.pause();
+        }
+
         try {
                mediaPlayer.setDataSource(song.getPath()); // set the path where the music file is present
 
@@ -25,6 +34,9 @@ public class MusicPlayer {
         MediaPlayer.OnPreparedListener onPreparedListener=new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                if(mediaPlayer.isPlaying()){
+                    mediaPlayer.pause();
+                }
                 mp.start(); // when the mediaPlayer is ready we play the music
             }
         };

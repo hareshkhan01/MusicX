@@ -122,21 +122,15 @@ public class MainActivity extends AppCompatActivity {
             List<Song> songList=sharedViewModel.getSongsList().getValue();
             assert songList != null;
             if(position+1<songList.size()){
-                if(!MusicPlayer.isMediaPlayerNull()){
-                    if(MusicPlayer.isAnyMusicPlaying()){
-                        MusicPlayer.pauseCurrentMusic();
-                    }
-                    MusicPlayer.playMusic(songList.get(position+1));
-                    sharedViewModel.setCurrentSongPosition(position+1);
-                    setupFloatingBarView(songList.get(position+1));
-                }
+                sharedViewModel.setCurrentSongPosition(position+1);
+                sharedViewModel.setCurrentSong(songList.get(position+1));
             }
         });
+        // set on click for bottom sheet trigger
         floatingCardView.setOnClickListener(view->{
             showMusicBottomSheet();
-            Glide.with(this).asBitmap()
-                    .load(Objects.requireNonNull(sharedViewModel.getCurrentSong().getValue()).getSongCoverImage())
-                    .into(bottomSheetCircularImageView);
+            setupBottomSheet();
+            updateCircularSeekBar();
         });
         sharedViewModel.getIsMusicPlaying().observe(MainActivity.this, aBoolean -> {
             if(aBoolean){
@@ -150,7 +144,13 @@ public class MainActivity extends AppCompatActivity {
         });
         sharedViewModel.getCurrentSong().observe(this, song -> {
             if(song!=null){
-                setupFloatingBarView(song);
+                if(!MusicPlayer.isMediaPlayerNull()){
+                    if(MusicPlayer.isAnyMusicPlaying()){
+                        MusicPlayer.pauseCurrentMusic();
+                    }
+                    MusicPlayer.playMusic(song);
+                    setupFloatingBarView(song);
+                }
             }
         });
 
@@ -214,6 +214,38 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setupBottomSheet() {
+        Song song=sharedViewModel.getCurrentSong().getValue();
+        assert song != null;
+        Glide.with(this).asBitmap()
+                .load(Objects.requireNonNull(song.getSongCoverImage()))
+                .into(bottomSheetCircularImageView);
+        bottomSongTitleName.setText(song.getSongName().trim());
+        bottomArtistName.setText(song.getArtistName().trim());
+        bottomSheetSeekBar.setMax((float)song.getDuration());
+        bottomSheetSeekBar.setProgress(MusicPlayer.getMusicCurrentPosition());
+        if(MusicPlayer.isAnyMusicPlaying()){
+            bottomSheetPlayPauseButton.setImageResource(R.drawable.ic_pause_icon);
+        }else{
+            bottomSheetPlayPauseButton.setImageResource(R.drawable.ic_play_button_icon_bottomsheet_dark);
+        }
+        int totalSecond=song.getDuration()/1000;
+        int minutes=totalSecond/60;
+        int second=totalSecond%60;
+        musicEndTime.setText(String.format("%02d:%02d",minutes,second));
+        bottomSheetPlayPauseButton.setOnClickListener(v->{
+            if(MusicPlayer.isAnyMusicPlaying()){
+                MusicPlayer.pauseCurrentMusic();
+                bottomSheetPlayPauseButton.setImageResource(R.drawable.ic_play_button_icon_bottomsheet_dark);
+            }
+            else {
+                MusicPlayer.startTheMusic();
+                bottomSheetPlayPauseButton.setImageResource(R.drawable.ic_pause_icon);
+            }
+        });
+
+    }
+
     private void setupFloatingBarView(Song song) {
         floatingBarSongTitle.setText(song.getSongName().trim());
         floatBarSongArtistName.setText(song.getArtistName());
@@ -228,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeBottomSheetView(View itemView) {
         bottomSheetCircularImageView=itemView.findViewById(R.id.music_imageview_bottom_sheet);
+        bottomSheetSeekBar=itemView.findViewById(R.id.circularSeekBar);
         bottomSheetPlayPauseButton=itemView.findViewById(R.id.bottomSheetPlayPauseButton);
         musicBackWardButton=itemView.findViewById(R.id.bottomSheetBackwardButton);
         musicForwardButton=itemView.findViewById(R.id.bottomSheetForwardButton);
@@ -248,14 +281,22 @@ public class MainActivity extends AppCompatActivity {
                 updateFloatingBarSeekBar();
             }
         },0);
-    }private void updateCircularSeekBar() {
+    }
+    private void updateCircularSeekBar() {
         Handler handler=new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
             if(!MusicPlayer.isMediaPlayerNull()){
-                bottomSheetSeekBar.setProgress(MusicPlayer.getMusicCurrentPosition());
-                updateFloatingBarSeekBar();
+                int totalMillis=MusicPlayer.getMusicCurrentPosition();
+                int totalSecond=totalMillis/1000;
+                int minutes=totalSecond/60;
+                int second=totalSecond%60;
+                String formattedTime= String.format("%02d:%02d",minutes,second);
+                musicCurrentStateTime.setText(formattedTime);
+                bottomSheetSeekBar.setProgress(totalMillis);
+
+                updateCircularSeekBar();
             }
-        },1000);
+        },0);
     }
 
 

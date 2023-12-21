@@ -233,7 +233,7 @@
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:contentDescription="@string/loop_button_description"
-                        android:src="@drawable/ic_loop_icon_black"
+                        android:src="@drawable/ic_loop_icon_blue"
                         tools:ignore="TouchTargetSizeCheck" />
 
                 </LinearLayout>
