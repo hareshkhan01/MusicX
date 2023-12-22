@@ -83,13 +83,6 @@ public class SongsFragment extends Fragment implements SongRecyclerViewAdapter.O
         sharedViewModel.setCurrentSong(song);
         sharedViewModel.setCurrentSongPosition(position);
         sharedViewModel.setIsMusicPlaying(true);
-        if (MusicPlayer.isAnyMusicPlaying()){
-            MusicPlayer.pauseCurrentMusic();
-            MusicPlayer.releaseMediaPlayer();
-            MusicPlayer.playMusic(song);
-        }
-        else {
-            MusicPlayer.playMusic(song);
-        }
+        MusicPlayer.getInstance().playMusic(song);
     }
 }

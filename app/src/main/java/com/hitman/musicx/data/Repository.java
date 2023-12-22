@@ -65,10 +65,12 @@ public class Repository {
 
         will give same result
          */
-        String selection = MediaStore.Audio.Media.IS_MUSIC+"!=0";
+        String gbWhatsAppDirectory = "/storage/emulated/0/Android/media/com.gbwhatsapp/GBWhatsApp/Media/GBWhatsApp Audio";
+        String selection = MediaStore.Audio.Media.IS_MUSIC + "!=0 AND " +
+                MediaStore.Audio.Media.DATA + " NOT LIKE '%" + gbWhatsAppDirectory + "%'";
 
         Cursor cursor=contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                projection,selection,null,null);// we use contentResolver to make  a query and then the result is a type of Cursor that point the top means
+                projection,selection,null,MediaStore.Audio.Media.TITLE+" ASC");// we use contentResolver to make  a query and then the result is a type of Cursor that point the top means
 
         if(cursor!=null){ // Then we checking that cursor should not null and prevent from null pointer exception
             while (cursor.moveToNext()){// then we move the cursor point to the next cause first position of the cursor has no data and we will move it to the next until end of the row
@@ -83,12 +85,6 @@ public class Repository {
                 song.setArtistName(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)));
                 song.setAlbumID(cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ID)));
 
-
-
-                // i use this previously to get the image of song album
-//                long albumIdLong = song.getAlbumID();  // Retrieve the album ID associated with the song
-//                Uri albumArtUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumIdLong);// Create a URI for the album artwork using the album ID and the base URI for album art
-//                song.setArtWork(albumArtUri.toString());  // Set the album artwork URI as a string in the 'song' instance
 
                 MyThread.executor.execute(()->{
                     SongImageLoader.setSongImage(song);

@@ -60,45 +60,10 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
         if(song.getSongCoverImage()!=null){
             Glide.with(context).asBitmap()
                     .load(song.getSongCoverImage())
+                    .placeholder(R.drawable.ic_music_placeholder_icon_dark)
+                    .error(R.drawable.ic_music_placeholder_icon_dark)
                     .into(holder.songImageView);
-
-            // we can also use this but i am not gonna use that
-//            .placeholder(R.drawable.ic_music_placeholder_icon_dark)
-//                    .error(R.drawable.ic_music_placeholder_icon_dark)
         }
-
-        // This is approach is good not ui lag but still some little bit of lag remains but the ui image loading is so annoying it changes again an aging while scrolling
-//    LoadImageTask loadImageTask=new LoadImageTask(holder.songImageView,song.getPath());
-//    loadImageTask.execute(song.getPath());
-
-
-
-        // This method is still laggy a bit but itna too chalta hain bar bar image loading hone se acha hai
-//          ExecutorService executor =Executors.newSingleThreadExecutor();
-//          executor.execute(()->{
-//              MediaMetadataRetriever mmr=new MediaMetadataRetriever();
-//              mmr.setDataSource(song.getPath());
-//              byte[] coverImage=mmr.getEmbeddedPicture();
-//              if(coverImage!=null){
-//                  new Handler(Looper.getMainLooper()).post(()->{
-//                      Glide.with(context).asBitmap()
-//                              .load(coverImage)
-//                              .into(holder.songImageView);
-//                  });
-//              }
-//
-//          });
-
-//        MediaMetadataRetriever mmr=new MediaMetadataRetriever();
-//        mmr.setDataSource(song.getPath());
-//        byte[] coverImage=mmr.getEmbeddedPicture();
-//        if(coverImage!=null){
-//                Glide.with(context).asBitmap()
-//                        .load(coverImage)
-//                        .into(holder.songImageView);
-//        }
-
-
     }
 
     @Override
@@ -133,53 +98,6 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
     public interface OnSongClickListener{
         void onSongClick(Song song,int position);
     }
-
-
-//    // AsyncTask to load album cover image in the background
-    public static class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
-
-        private final WeakReference<ImageView> imageViewReference;
-        private final String songPath;
-        private static final Map<String, Bitmap> imageCache = new HashMap<>();
-
-        public LoadImageTask(ImageView imageView, String songPath) {
-            imageViewReference = new WeakReference<>(imageView);
-            this.songPath = songPath;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            Bitmap cachedBitmap = imageCache.get(songPath);
-            if (cachedBitmap != null) {
-                return cachedBitmap;
-            }
-
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.setDataSource(songPath);
-
-            byte[] coverImageBytes = retriever.getEmbeddedPicture();
-
-            if (coverImageBytes != null) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(coverImageBytes, 0, coverImageBytes.length);
-                imageCache.put(songPath, bitmap);
-                return bitmap;
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            if (imageViewReference != null && bitmap != null) {
-                ImageView imageView = imageViewReference.get();
-                if (imageView != null && songPath.equals(imageView.getTag())) {
-                    imageView.setImageBitmap(bitmap);
-                }
-            }
-        }
-    }
-
-
 
 
 }

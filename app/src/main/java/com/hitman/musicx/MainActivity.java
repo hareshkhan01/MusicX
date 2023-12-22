@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton musicForwardButton;
     private ImageButton bottomSheetPlayPauseButton;
     private ImageButton loopButton;
+    private MusicPlayer musicPlayer;
 
 
     @Override
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         sharedViewModel=new ViewModelProvider(this).get(SharedViewModel.class);
         SongViewModel songViewModel=new ViewModelProvider.AndroidViewModelFactory(MainActivity.this.getApplication()).create(SongViewModel.class);
 
-        MusicPlayer musicPlayer=new MusicPlayer();
+        musicPlayer=MusicPlayer.getInstance();
 
 
         //Floating bar view set up and initialization
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
             List<Song> songList=sharedViewModel.getSongsList().getValue();
             assert songList != null;
             if(position+1<songList.size()){
+                Log.d("SongPath", "onCreate: "+songList.get(position).getPath());
                 sharedViewModel.setCurrentSongPosition(position+1);
                 sharedViewModel.setCurrentSong(songList.get(position+1));
             }
@@ -144,24 +146,24 @@ public class MainActivity extends AppCompatActivity {
         });
         sharedViewModel.getCurrentSong().observe(this, song -> {
             if(song!=null){
-                if(!MusicPlayer.isMediaPlayerNull()){
-                    if(MusicPlayer.isAnyMusicPlaying()){
-                        MusicPlayer.pauseCurrentMusic();
+                if(!MusicPlayer.getInstance().isMediaPlayerNull()){
+                    if(MusicPlayer.getInstance().isAnyMusicPlaying()){
+                        MusicPlayer.getInstance().pauseCurrentMusic();
                     }
-                    MusicPlayer.playMusic(song);
+                    MusicPlayer.getInstance().playMusic(song);
                     setupFloatingBarView(song);
                 }
             }
         });
 
         floatingBarPlayPauseButton.setOnClickListener(v -> {
-            if(!MusicPlayer.isMediaPlayerNull()){
-                if(MusicPlayer.isAnyMusicPlaying()){
-                    MusicPlayer.pauseCurrentMusic();
+            if(!MusicPlayer.getInstance().isMediaPlayerNull()){
+                if(MusicPlayer.getInstance().isAnyMusicPlaying()){
+                    MusicPlayer.getInstance().pauseCurrentMusic();
                     floatingBarPlayPauseButton.setImageResource(R.drawable.ic_float_bar_play_icon_dark);
                 }
                 else{
-                    MusicPlayer.startTheMusic();
+                    MusicPlayer.getInstance().startTheMusic();
                     floatingBarPlayPauseButton.setImageResource(R.drawable.ic_float_bar_pause_icon_dark);
                 }
             }
@@ -218,13 +220,16 @@ public class MainActivity extends AppCompatActivity {
         Song song=sharedViewModel.getCurrentSong().getValue();
         assert song != null;
         Glide.with(this).asBitmap()
-                .load(Objects.requireNonNull(song.getSongCoverImage()))
+                .load(song.getSongCoverImage())
+                .placeholder(R.drawable.ic_music_placeholder_icon_dark)
+                .error(R.drawable.ic_music_placeholder_icon_dark)
                 .into(bottomSheetCircularImageView);
+        bottomSongTitleName.setSelected(true);
         bottomSongTitleName.setText(song.getSongName().trim());
         bottomArtistName.setText(song.getArtistName().trim());
         bottomSheetSeekBar.setMax((float)song.getDuration());
-        bottomSheetSeekBar.setProgress(MusicPlayer.getMusicCurrentPosition());
-        if(MusicPlayer.isAnyMusicPlaying()){
+        bottomSheetSeekBar.setProgress(MusicPlayer.getInstance().getMusicCurrentPosition());
+        if(MusicPlayer.getInstance().isAnyMusicPlaying()){
             bottomSheetPlayPauseButton.setImageResource(R.drawable.ic_pause_icon);
         }else{
             bottomSheetPlayPauseButton.setImageResource(R.drawable.ic_play_button_icon_bottomsheet_dark);
@@ -234,12 +239,12 @@ public class MainActivity extends AppCompatActivity {
         int second=totalSecond%60;
         musicEndTime.setText(String.format("%02d:%02d",minutes,second));
         bottomSheetPlayPauseButton.setOnClickListener(v->{
-            if(MusicPlayer.isAnyMusicPlaying()){
-                MusicPlayer.pauseCurrentMusic();
+            if(MusicPlayer.getInstance().isAnyMusicPlaying()){
+                MusicPlayer.getInstance().pauseCurrentMusic();
                 bottomSheetPlayPauseButton.setImageResource(R.drawable.ic_play_button_icon_bottomsheet_dark);
             }
             else {
-                MusicPlayer.startTheMusic();
+                MusicPlayer.getInstance().startTheMusic();
                 bottomSheetPlayPauseButton.setImageResource(R.drawable.ic_pause_icon);
             }
         });
@@ -276,8 +281,8 @@ public class MainActivity extends AppCompatActivity {
     private void updateFloatingBarSeekBar() {
         Handler handler=new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
-            if(!MusicPlayer.isMediaPlayerNull()){
-                seekBar.setProgress(MusicPlayer.getMusicCurrentPosition());
+            if(!MusicPlayer.getInstance().isMediaPlayerNull()){
+                seekBar.setProgress(MusicPlayer.getInstance().getMusicCurrentPosition());
                 updateFloatingBarSeekBar();
             }
         },0);
@@ -285,8 +290,8 @@ public class MainActivity extends AppCompatActivity {
     private void updateCircularSeekBar() {
         Handler handler=new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
-            if(!MusicPlayer.isMediaPlayerNull()){
-                int totalMillis=MusicPlayer.getMusicCurrentPosition();
+            if(!MusicPlayer.getInstance().isMediaPlayerNull()){
+                int totalMillis=MusicPlayer.getInstance().getMusicCurrentPosition();
                 int totalSecond=totalMillis/1000;
                 int minutes=totalSecond/60;
                 int second=totalSecond%60;
@@ -423,11 +428,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (MusicPlayer.isAnyMusicPlaying()){
-            MusicPlayer.pauseCurrentMusic();
+        if (MusicPlayer.getInstance().isAnyMusicPlaying()){
+            MusicPlayer.getInstance().pauseCurrentMusic();
          }
-        MusicPlayer.releaseMediaPlayer();
-        MusicPlayer.stopCurrentMusic();
-        MusicPlayer.setMediaPlayerNull();
+        MusicPlayer.getInstance().releaseMediaPlayer();
+        MusicPlayer.getInstance().stopCurrentMusic();
+        MusicPlayer.getInstance().setMediaPlayerNull();
     }
 }

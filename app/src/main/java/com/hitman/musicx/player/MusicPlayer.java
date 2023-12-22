@@ -2,44 +2,48 @@ package com.hitman.musicx.player;
 
 import android.app.Application;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.util.Log;
 
 import com.hitman.musicx.model.Song;
 
 import java.io.IOException;
 
-public class MusicPlayer {
-    private static MediaPlayer mediaPlayer;
 
-    public static void playMusic(Song song){
 
-        if(MusicPlayer.isMediaPlayerNull()){
-            mediaPlayer=new MediaPlayer(); // we just initialize the mediaPlayer simply because we will play music from storage or API web link
+public class MusicPlayer extends Application{
+    private MediaPlayer mediaPlayer;
+    private static MusicPlayer INSTANCE;
+    private MusicPlayer(){
+        mediaPlayer=new MediaPlayer();
+    }
+    public static MusicPlayer getInstance(){
+        if(INSTANCE==null){
+            synchronized (MusicPlayer.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new MusicPlayer();
+                }
+            }
         }
-
-        if(mediaPlayer.isPlaying()){
-            mediaPlayer.pause();
-        }
-
+        return INSTANCE;
+    }
+    public  void playMusic (Song song){
         try {
-               mediaPlayer.setDataSource(song.getPath()); // set the path where the music file is present
-
-        } catch (IOException e) {
+            if(mediaPlayer!=null){
+                mediaPlayer.stop();
+                mediaPlayer.reset(); // Reset the MediaPlayer to the Idle state
+                mediaPlayer.setDataSource(song.getPath());
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }
+        } catch (IOException | IllegalStateException e) {
             throw new RuntimeException(e);
         }
 
         /*
         create a separate OnPreparedListener
          */
-        MediaPlayer.OnPreparedListener onPreparedListener=new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                if(mediaPlayer.isPlaying()){
-                    mediaPlayer.pause();
-                }
-                mp.start(); // when the mediaPlayer is ready we play the music
-            }
-        };
+
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -48,8 +52,7 @@ public class MusicPlayer {
                 }
             }
         });
-        mediaPlayer.setOnPreparedListener(onPreparedListener); // set a preparesListener means set a listener that will execute the respected code inside that when the mediaPlayer will ready after async request
-        mediaPlayer.prepareAsync(); // making an asynchronous request
+
 
     }
 
@@ -58,51 +61,50 @@ public class MusicPlayer {
     or
     we can also say we just override the normal  function of MediaPlayer class for out benefits
      */
-    public static void startTheMusic(){
+    public void startTheMusic(){
         if(mediaPlayer!=null){
             mediaPlayer.start();
         }
     }
-    public static void stopCurrentMusic()
+    public void stopCurrentMusic()
     {
         if(mediaPlayer!=null){
             mediaPlayer.stop();
         }
     }
-    public static void pauseCurrentMusic()
+    public void pauseCurrentMusic()
     {
         if(mediaPlayer!=null){
             mediaPlayer.pause();
         }
     }
-    public static boolean isAnyMusicPlaying()
+    public boolean isAnyMusicPlaying()
     {
         if(mediaPlayer!=null){
             return mediaPlayer.isPlaying();
         }
         return false;
     }
-    public static void seekTo(int time){
+    public void seekTo(int time){
         if (mediaPlayer!=null){
             mediaPlayer.seekTo(time);
         }
     }
-    public static int getMusicCurrentPosition(){
+    public int getMusicCurrentPosition(){
         return mediaPlayer!=null?mediaPlayer.getCurrentPosition():-1;
     }
-    public static void releaseMediaPlayer(){
+    public void releaseMediaPlayer(){
         if(mediaPlayer!=null){
             mediaPlayer.release();
         }
     }
-    public static void setMediaPlayerNull()
+    public void setMediaPlayerNull()
     {
         if(mediaPlayer!=null){
             mediaPlayer=null;
         }
     }
-    public  static boolean isMediaPlayerNull(){
+    public boolean isMediaPlayerNull(){
         return mediaPlayer == null;
     }
-
 }
