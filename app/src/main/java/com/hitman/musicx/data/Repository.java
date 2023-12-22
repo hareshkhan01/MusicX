@@ -65,12 +65,17 @@ public class Repository {
 
         will give same result
          */
-        String gbWhatsAppDirectory = "/storage/emulated/0/Android/media/com.gbwhatsapp/GBWhatsApp/Media/GBWhatsApp Audio";
-        String selection = MediaStore.Audio.Media.IS_MUSIC + "!=0 AND " +
-                MediaStore.Audio.Media.DATA + " NOT LIKE '%" + gbWhatsAppDirectory + "%'";
+        String whatsappDirectory = "/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio";
+        String gbwhatsappDirectory = "/storage/emulated/0/Android/media/com.gbwhatsapp/GBWhatsApp/Media/GBWhatsApp Audio";
+
+        String dynamicSelection = MediaStore.Audio.Media.IS_MUSIC + "!=0 AND " +
+                "(" +
+                MediaStore.Audio.Media.DATA + " NOT LIKE '%" + whatsappDirectory + "%' OR " +
+                MediaStore.Audio.Media.DATA + " NOT LIKE '%" + gbwhatsappDirectory + "%'" +
+                ")";
 
         Cursor cursor=contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                projection,selection,null,MediaStore.Audio.Media.TITLE+" ASC");// we use contentResolver to make  a query and then the result is a type of Cursor that point the top means
+                projection,dynamicSelection,null,MediaStore.Audio.Media.TITLE+" ASC");// we use contentResolver to make  a query and then the result is a type of Cursor that point the top means
 
         if(cursor!=null){ // Then we checking that cursor should not null and prevent from null pointer exception
             while (cursor.moveToNext()){// then we move the cursor point to the next cause first position of the cursor has no data and we will move it to the next until end of the row
