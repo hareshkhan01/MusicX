@@ -65,12 +65,12 @@ public class Repository {
 
         will give same result
          */
-        String whatsappDirectory = "/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio";
-        String gbwhatsappDirectory = "/storage/emulated/0/Android/media/com.gbwhatsapp/GBWhatsApp/Media/GBWhatsApp Audio";
+        String whatsappDirectory = "/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/";
+        String gbwhatsappDirectory = "/storage/emulated/0/Android/media/com.gbwhatsapp/GBWhatsApp/Media/GBWhatsApp Audio/";
 
         String dynamicSelection = MediaStore.Audio.Media.IS_MUSIC + "!=0 AND " +
                 "(" +
-                MediaStore.Audio.Media.DATA + " NOT LIKE '%" + whatsappDirectory + "%' OR " +
+                MediaStore.Audio.Media.DATA + " NOT LIKE '%" + whatsappDirectory + "%' AND " +
                 MediaStore.Audio.Media.DATA + " NOT LIKE '%" + gbwhatsappDirectory + "%'" +
                 ")";
 
@@ -106,6 +106,7 @@ public class Repository {
             Log.d("mySongArt", "SongImagePath: "+s.getArtWork());
         }
         repoMutableLiveData.postValue(arrayList);
+        Log.d("Song15", "getSongList: "+arrayList.get(15).getPath());
         return repoMutableLiveData;
     }
 }
